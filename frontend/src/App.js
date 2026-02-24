@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import axios from 'axios';
+
 import './App.css';
 import Header from './components/Header';
 import LandingPage from './components/LandingPage';
@@ -15,10 +15,13 @@ import AdminContributions from './components/AdminContributions';
 import RescueTeamAssignment from './components/RescueTeamAssignment';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-// Configure axios defaults
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+/* ======================
+   Axios Global Config
+====================== */
 
-// Add request interceptor to include auth token
+axios.defaults.baseURL =
+  process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -27,12 +30,9 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Add response interceptor to handle auth errors
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -44,61 +44,109 @@ axios.interceptors.response.use(
   }
 );
 
+/* ======================
+   App Content
+====================== */
+
 function AppContent() {
-  const { isAuthenticated } = useAuth();
-  const { user } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
   const isAdmin = user?.role === 'admin';
+
+  // 🔥 MOST IMPORTANT FIX
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '40vh' }}>
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="App">
       {isAuthenticated && <Header />}
-      <div className={isAuthenticated ? "container" : ""}>
+
+      <div className={isAuthenticated ? 'container' : ''}>
         <Routes>
-          <Route 
-            path="/" 
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />} 
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />
+            }
           />
-          <Route 
-            path="/login" 
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} 
+
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
+            }
           />
-          <Route 
-            path="/dashboard" 
-            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} 
+
+          <Route
+            path="/dashboard"
+            element={
+              isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
+            }
           />
-          <Route 
-            path="/contribute" 
-            element={isAuthenticated ? <ContributionForm /> : <Navigate to="/login" />} 
+
+          <Route
+            path="/contribute"
+            element={
+              isAuthenticated ? <ContributionForm /> : <Navigate to="/login" />
+            }
           />
-          <Route 
-            path="/disasters" 
-            element={isAuthenticated ? <DisasterList /> : <Navigate to="/login" />} 
+
+          <Route
+            path="/disasters"
+            element={
+              isAuthenticated ? <DisasterList /> : <Navigate to="/login" />
+            }
           />
-          <Route 
-            path="/disaster/report" 
-            element={isAuthenticated ? <DisasterReport /> : <Navigate to="/login" />} 
+
+          <Route
+            path="/disaster/report"
+            element={
+              isAuthenticated ? <DisasterReport /> : <Navigate to="/login" />
+            }
           />
-          {/* Admin only: create/edit disasters */}
-          <Route 
-            path="/disaster/create" 
-            element={isAuthenticated && isAdmin ? <DisasterForm /> : <Navigate to="/login" />} 
+
+          {/* Admin Routes */}
+          <Route
+            path="/disaster/create"
+            element={
+              isAuthenticated && isAdmin
+                ? <DisasterForm />
+                : <Navigate to="/login" />
+            }
           />
-          {/* Admin only: view all contributions */}
-          <Route 
-            path="/admin/contributions" 
-            element={isAuthenticated && isAdmin ? <AdminContributions /> : <Navigate to="/login" />} 
+
+          <Route
+            path="/admin/contributions"
+            element={
+              isAuthenticated && isAdmin
+                ? <AdminContributions />
+                : <Navigate to="/login" />
+            }
           />
-          {/* Admin only: assign rescue teams */}
-          <Route 
-            path="/admin/rescue-teams" 
-            element={isAuthenticated && isAdmin ? <RescueTeamAssignment /> : <Navigate to="/login" />} 
+
+          <Route
+            path="/admin/rescue-teams"
+            element={
+              isAuthenticated && isAdmin
+                ? <RescueTeamAssignment />
+                : <Navigate to="/login" />
+            }
           />
+
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
     </div>
   );
 }
+
+/* ======================
+   Root App
+====================== */
 
 function App() {
   return (
