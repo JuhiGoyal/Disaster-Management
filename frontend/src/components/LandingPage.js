@@ -13,7 +13,7 @@ const LandingPage = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h1 className="hero-title">
-              National Disaster Management
+              ResQNet Disaster Management
               <span className="hero-subtitle">Emergency Response System</span>
             </h1>
             <p className="hero-description">
