@@ -10,20 +10,29 @@ const chatRoutes=require('./routes/chatRoutes');
 const path=require('path');
 const app=express();
 
-// Split by comma in case multiple origins are provided
-const allowedOrigins = process.env.FRONTEND_URL 
-  ? process.env.FRONTEND_URL.split(',') 
-  : ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://resqnetdcms.netlify.app'];
+// Base allowed origins
+const defaultOrigins = [
+  'http://localhost:3000', 
+  'http://127.0.0.1:3000', 
+  'https://resqnetdcms.netlify.app'
+];
 
+// Add FRONTEND_URL if it exists in the environment variables
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? [...defaultOrigins, ...process.env.FRONTEND_URL.split(',').map(url => url.trim())]
+  : defaultOrigins;
 
 
 app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
+    
+    // Check if the exact origin is in the list, or if the list contains '*' (wildcard)
     if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
       callback(null, true);
     } else {
+      console.log(`Blocked by CORS: ${origin}`); // Better debugging in Render logs
       callback(new Error('Not allowed by CORS'));
     }
   },
