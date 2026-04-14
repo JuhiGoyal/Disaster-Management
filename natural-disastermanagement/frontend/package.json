@@ -1,7 +1,7 @@
 {
-  "name": "disaster-management-frontend",
+  "name": "resqnet-frontend",
   "version": "1.0.0",
-  "description": "React frontend for Disaster Management System - Contribution Creation Flow",
+  "description": "React frontend for ResQNet - Emergency Response System",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",

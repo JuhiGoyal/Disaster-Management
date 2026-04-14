@@ -13,7 +13,7 @@ const LandingPage = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h1 className="hero-title">
-              National Disaster Management
+              ResQNet
               <span className="hero-subtitle">Emergency Response System</span>
             </h1>
             <p className="hero-description">
@@ -53,7 +53,7 @@ const LandingPage = () => {
         <div className="container">
           <div className="section-header">
             <h2>System Capabilities</h2>
-            <p>Comprehensive disaster management tools for modern emergency response</p>
+            <p>Comprehensive ResQNet tools for modern emergency response</p>
           </div>
           
           <div className="features-grid">
@@ -75,10 +75,13 @@ const LandingPage = () => {
               <p>Comprehensive data visualization and reporting tools for informed decision-making and resource allocation.</p>
             </div>
             
-            <div className="feature-card">
-              <div className="feature-icon">🛡️</div>
-              <h3>Admin Management</h3>
-              <p>Advanced administrative tools for disaster creation, contribution management, and system oversight.</p>
+            <div className="feature-card highlighted">
+              <div className="feature-icon">🚑</div>
+              <h3>Rescue Coordination</h3>
+              <p>Official NGOs and Rescue Teams can join our network to coordinate field operations.</p>
+              <Link to="/register-rescue-team" className="btn btn-secondary" style={{ marginTop: '15px' }}>
+                Register Team
+              </Link>
             </div>
           </div>
         </div>
@@ -123,7 +126,7 @@ const LandingPage = () => {
         <div className="container">
           <div className="footer-content">
             <div className="footer-section">
-              <h4>National Disaster Management</h4>
+              <h4>ResQNet</h4>
               <p>Building resilient communities through technology and collaboration.</p>
             </div>
             <div className="footer-section">
@@ -141,7 +144,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="footer-bottom">
-            <p>&copy; 2024 National Disaster Management System. All rights reserved.</p>
+            <p>&copy; 2024 ResQNet. All rights reserved.</p>
           </div>
         </div>
       </footer>

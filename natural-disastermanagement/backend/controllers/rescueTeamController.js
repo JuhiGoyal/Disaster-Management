@@ -1,5 +1,7 @@
 const RescueTeam = require('../models/rescueTeam');
 const Disaster = require('../models/disaster');
+const { sendEmail } = require('../utils/emailService');
+const templates = require('../utils/emailTemplates');
 
 // Create a new rescue team
 const createRescueTeam = async (req, res) => {
@@ -48,6 +50,9 @@ const createRescueTeam = async (req, res) => {
             message: 'Rescue team created successfully',
             data: rescueTeam
         });
+
+        // Async email confirmation
+        sendEmail(contactEmail, 'Rescue Team Registration Confirmation', templates.rescueTeamAck(name));
 
     } catch (error) {
         console.error('Error creating rescue team:', error);
@@ -184,6 +189,11 @@ const assignRescueTeamToDisaster = async (req, res) => {
             message: 'Rescue team assigned to disaster successfully',
             data: rescueTeam
         });
+
+        // Async deployment alert
+        if (rescueTeam.contactEmail) {
+            sendEmail(rescueTeam.contactEmail, '⚠️ DEPLOYMENT ALERT: ResQNet', templates.deploymentNotice(rescueTeam.name, disaster.title, disaster.location?.city || 'the field'));
+        }
 
     } catch (error) {
         console.error('Error assigning rescue team:', error);

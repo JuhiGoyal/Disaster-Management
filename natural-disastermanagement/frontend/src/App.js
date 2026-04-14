@@ -13,6 +13,8 @@ import DisasterForm from './components/DisasterForm';
 import DisasterReport from './components/DisasterReport';
 import AdminContributions from './components/AdminContributions';
 import RescueTeamAssignment from './components/RescueTeamAssignment';
+import RescueTeamRegistration from './components/RescueTeamRegistration';
+import Chatbot from './components/Chatbot';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Configure axios defaults
@@ -59,6 +61,10 @@ function AppContent() {
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />} 
           />
           <Route 
+            path="/register-rescue-team" 
+            element={<RescueTeamRegistration />} 
+          />
+          <Route 
             path="/login" 
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />} 
           />
@@ -96,6 +102,7 @@ function AppContent() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
+      <Chatbot />
     </div>
   );
 }

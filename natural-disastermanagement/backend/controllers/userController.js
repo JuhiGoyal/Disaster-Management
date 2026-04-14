@@ -2,6 +2,8 @@ const User=require('../models/user');
 const bcrypt=require('bcryptjs');
 const { json } = require('express');
 const jwt=require('jsonwebtoken');
+const { sendEmail } = require('../utils/emailService');
+const templates = require('../utils/emailTemplates');
 exports.createUser=async(req,res)=>{
     try {
         // Check if user already exists
@@ -35,7 +37,10 @@ exports.createUser=async(req,res)=>{
         await createUser.save();
         
         // Generate JWT token
-        const token=jwt.sign({id:createUser._id, role:createUser.role || 'user'}, process.env.JWT_SECRET || 'auth_key', {expiresIn:'10d'});
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token=jwt.sign({id:createUser._id, role:createUser.role || 'user'}, process.env.JWT_SECRET, {expiresIn:'10d'});
         
         res.status(201).json({
             message:'User created successfully',
@@ -44,6 +49,10 @@ exports.createUser=async(req,res)=>{
                 token: token
             }
         });
+
+        // Async email trigger (now awaited for verification)
+        const emailResult = await sendEmail(createUser.email, 'Welcome to ResQNet!', templates.welcome(createUser.name));
+        console.log('Welcome email status for', createUser.email, ':', emailResult.success ? 'Sent' : 'Failed');
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({message: 'Registration failed', error: error.message});
@@ -58,9 +67,12 @@ exports.login=async(req,res)=>{
             return res.status(401).json({message:"User not found"});
         }
         const match=await bcrypt.compare(req.body.password,user.password);
-        if(match)
+        if (match)
         {
-            const token=jwt.sign({id:user._id, role:user.role || 'user'}, process.env.JWT_SECRET || 'auth_key', {expiresIn:'10d'});
+            if (!process.env.JWT_SECRET) {
+                throw new Error('JWT_SECRET is not defined');
+            }
+            const token=jwt.sign({id:user._id, role:user.role || 'user'}, process.env.JWT_SECRET, {expiresIn:'10d'});
             res.json({
                 message:"Login successful",
                 data: {
@@ -79,8 +91,20 @@ exports.login=async(req,res)=>{
     }
 }
 
-exports.profile=(req,res)=>{
-   res.json({message:"profile fetched"});
+exports.profile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        res.json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        console.error('Profile fetch error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch profile', error: error.message });
+    }
 }
 
 // Admin quick-create endpoint (server-side guard should be added if exposed)
@@ -94,7 +118,10 @@ exports.createAdmin = async (req,res)=>{
         if (existing) return res.status(400).json({ message:'Admin already exists with this email' });
         const pass = await bcrypt.hash(password, 10);
         const admin = await User.create({ name, email, password: pass, role:'admin' });
-        const token = jwt.sign({ id: admin._id, role:'admin' }, process.env.JWT_SECRET || 'auth_key', { expiresIn:'10d' });
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token = jwt.sign({ id: admin._id, role:'admin' }, process.env.JWT_SECRET, { expiresIn:'10d' });
         res.status(201).json({ message:'Admin created', data:{ user: admin, token } });
     } catch (error) {
         console.error('Create admin error:', error);

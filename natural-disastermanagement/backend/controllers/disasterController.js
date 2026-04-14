@@ -1,6 +1,9 @@
 const Disaster = require('../models/disaster');
 const fs = require('fs');
 const path = require('path');
+const User = require('../models/user');
+const { sendEmail } = require('../utils/emailService');
+const templates = require('../utils/emailTemplates');
 
 // Add a new disaster
 const addDisaster = async (req, res) => {
@@ -80,6 +83,18 @@ const addDisaster = async (req, res) => {
             message: 'Disaster added successfully',
             data: disaster
         });
+
+        // Async email trigger
+        if (req.user && req.user.id) {
+            try {
+                const user = await User.findById(req.user.id);
+                if (user && user.email) {
+                    sendEmail(user.email, 'Disaster Report Received', templates.reportConfirmation(user.name, title));
+                }
+            } catch (emailErr) {
+                console.error('Failed to send disaster report email:', emailErr);
+            }
+        }
 
     } catch (error) {
         console.error('Error adding disaster:', error);

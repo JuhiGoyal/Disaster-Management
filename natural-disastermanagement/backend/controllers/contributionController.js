@@ -3,6 +3,9 @@ const Disaster = require('../models/disaster');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
+const User = require('../models/user');
+const { sendEmail } = require('../utils/emailService');
+const templates = require('../utils/emailTemplates');
 
 // Helper function to safely parse JSON or return object as-is
 const safeJsonParse = (data) => {
@@ -92,6 +95,18 @@ const createContribution = async (req, res) => {
                 disasterTitle: disaster.title
             }
         });
+
+        // Async email trigger
+        try {
+            const user = await User.findById(userId);
+            if (user && user.email) {
+                const amountStr = contributionType === 'funds' ? `₹${amount}` : `${amount} units of ${contributionType}`;
+                const emailResult = await sendEmail(user.email, 'Thank You for Your Contribution', templates.donationReceipt(user.name, contributionType, amountStr, disaster.title));
+                console.log('Donation receipt status for', user.email, ':', emailResult.success ? 'Sent' : 'Failed');
+            }
+        } catch (emailErr) {
+            console.error('Failed to send contribution email:', emailErr);
+        }
 
     } catch (error) {
         console.error('Error creating contribution:', error);

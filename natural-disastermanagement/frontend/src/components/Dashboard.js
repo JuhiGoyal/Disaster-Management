@@ -65,7 +65,7 @@ const Dashboard = () => {
       <div className="dashboard-header">
         <div className="welcome-section">
           <h1>Emergency Response Dashboard</h1>
-          <p>Welcome back, <span className="user-highlight">{user?.name || 'User'}</span>! Here's your disaster management overview.</p>
+          <p>Welcome back, <span className="user-highlight">{user?.name || 'User'}</span>! Here's your ResQNet overview.</p>
           <div className="user-role-badge">
             <span className="role-icon">{user?.role === 'admin' ? '🛡️' : '👤'}</span>
             <span className="role-text">{user?.role === 'admin' ? 'Administrator' : 'Emergency Responder'}</span>

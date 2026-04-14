@@ -20,7 +20,10 @@ const authenticateToken = (req, res, next) => {
             });
         }
 
-        jwt.verify(token, process.env.JWT_SECRET || 'auth_key', (err, user) => {
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
             if (err) {
                 return res.status(403).json({
                     success: false,

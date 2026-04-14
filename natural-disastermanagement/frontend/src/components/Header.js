@@ -25,7 +25,7 @@ const Header = () => {
             <div className="brand-logo">
               <div className="logo-icon">🛡️</div>
               <div className="brand-text">
-                <h1>National Disaster Management</h1>
+                <h1>ResQNet</h1>
                 <span className="brand-subtitle">Emergency Response System</span>
               </div>
             </div>

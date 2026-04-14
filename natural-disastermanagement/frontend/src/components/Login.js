@@ -86,13 +86,13 @@ const Login = () => {
             <div className="login-logo">
               <div className="logo-icon">🛡️</div>
               <div className="logo-text">
-                <h2>National Disaster Management</h2>
+                <h2>ResQNet</h2>
                 <span className="logo-subtitle">Emergency Response System</span>
               </div>
             </div>
             <div className="login-title">
               <h3>{isRegister ? (isAdmin ? 'Admin Registration' : 'Create Account') : (isAdmin ? 'Admin Access' : 'System Login')}</h3>
-              <p>{isRegister ? 'Join the emergency response network' : 'Access the disaster management system'}</p>
+              <p>{isRegister ? 'Join the emergency response network' : 'Access the ResQNet system'}</p>
             </div>
           </div>
 

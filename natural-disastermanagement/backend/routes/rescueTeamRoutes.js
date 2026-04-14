@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const rescueTeamController = require('../controllers/rescueTeamController');
-const authenticateToken = require('../middlware/auth');
+const authenticateToken = require('../middleware/auth');
+
+// Create a new rescue team (Public registration)
+router.post('/register', rescueTeamController.createRescueTeam);
 
 // Create a new rescue team (admin only)
 router.post('/', authenticateToken, rescueTeamController.createRescueTeam);
