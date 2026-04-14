@@ -13,7 +13,8 @@ const app=express();
 // Split by comma in case multiple origins are provided
 const allowedOrigins = process.env.FRONTEND_URL 
   ? process.env.FRONTEND_URL.split(',') 
-  : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3001'];
+  : ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://resqnetdcms.netlify.app'];
+
 
 
 app.use(cors({
