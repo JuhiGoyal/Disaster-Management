@@ -297,12 +297,64 @@ const deleteContribution = async (req, res) => {
     }
 };
 
+// Update contribution status (admin only)
+const updateContributionStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
 
+        // Check if user is authenticated and has admin privileges
+        if (!req.user || req.user.role !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Admin privileges required'
+            });
+        }
+
+        // Validate status value
+        if (!['pending', 'approved', 'rejected', 'completed'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid status value. Must be pending, approved, rejected, or completed.'
+            });
+        }
+
+        const contribution = await Contribution.findById(id);
+        if (!contribution) {
+            return res.status(404).json({
+                success: false,
+                message: 'Contribution not found'
+            });
+        }
+
+        contribution.status = status;
+        await contribution.save();
+
+        const updatedContribution = await Contribution.findById(id)
+            .populate('userId', 'name email')
+            .populate('disasterId', 'title type location');
+
+        res.status(200).json({
+            success: true,
+            message: `Contribution status updated to ${status} successfully`,
+            data: updatedContribution
+        });
+
+    } catch (error) {
+        console.error('Error updating contribution status:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+};
 
 module.exports = {
     createContribution,
     getContributions,
     getContributionById,
     updateContribution,
-    deleteContribution
+    deleteContribution,
+    updateContributionStatus
 }; 

@@ -6,7 +6,8 @@ const {
     getContributions,
     getContributionById,
     updateContribution,
-    deleteContribution
+    deleteContribution,
+    updateContributionStatus
 } = require('../controllers/contributionController');
 
 // Create contribution
@@ -23,6 +24,9 @@ router.put('/:id', auth, updateContribution);
 
 // Delete contribution
 router.delete('/:id', auth, deleteContribution);
+
+// Update contribution status (admin only)
+router.patch('/:id/status', auth, updateContributionStatus);
 
 
 

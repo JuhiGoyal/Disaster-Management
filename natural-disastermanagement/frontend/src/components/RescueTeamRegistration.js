@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import './RescueTeamRegistration.css';
@@ -41,7 +41,7 @@ const RescueTeamRegistration = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/rescue-team/register', formData);
+      const response = await api.post('/rescue-team/register', formData);
       if (response.data.success) {
         toast.success('Registration successful! Our team will contact you soon.');
         navigate('/');

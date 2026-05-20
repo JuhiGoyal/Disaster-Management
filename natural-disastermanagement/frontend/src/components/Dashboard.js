@@ -68,7 +68,7 @@ const Dashboard = () => {
           <p>Welcome back, <span className="user-highlight">{user?.name || 'User'}</span>! Here's your ResQNet overview.</p>
           <div className="user-role-badge">
             <span className="role-icon">{user?.role === 'admin' ? '🛡️' : '👤'}</span>
-            <span className="role-text">{user?.role === 'admin' ? 'Administrator' : 'Emergency Responder'}</span>
+            <span className="role-text">{user?.role === 'admin' ? 'Administrator' : 'Civilian'}</span>
           </div>
         </div>
         <div className="system-status">
@@ -86,32 +86,65 @@ const Dashboard = () => {
           <p>Access essential emergency response tools</p>
         </div>
         <div className="quick-actions">
-          <Link to="/contribute" className="action-card">
-            <div className="action-icon">🤝</div>
-            <div className="action-content">
-              <h4>Create Contribution</h4>
-              <p>Submit resources or volunteer assistance</p>
-            </div>
-            <div className="action-arrow">→</div>
-          </Link>
-          
-          <Link to="/disasters" className="action-card">
-            <div className="action-icon">🌪️</div>
-            <div className="action-content">
-              <h4>View Disasters</h4>
-              <p>Monitor active emergency situations</p>
-            </div>
-            <div className="action-arrow">→</div>
-          </Link>
-          
-          <div className="action-card">
-            <div className="action-icon">📊</div>
-            <div className="action-content">
-              <h4>My Contributions</h4>
-              <p>Track your submitted contributions</p>
-            </div>
-            <div className="action-arrow">→</div>
-          </div>
+          {user?.role === 'admin' ? (
+            <>
+              <Link to="/disaster/create" className="action-card">
+                <div className="action-icon">➕</div>
+                <div className="action-content">
+                  <h4>Create Disaster</h4>
+                  <p>Log a new disaster event</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+              
+              <Link to="/admin/rescue-teams" className="action-card">
+                <div className="action-icon">🚑</div>
+                <div className="action-content">
+                  <h4>Manage Rescue Teams</h4>
+                  <p>Assign teams to emergencies</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+              
+              <Link to="/admin/contributions" className="action-card">
+                <div className="action-icon">🛡️</div>
+                <div className="action-content">
+                  <h4>Admin Panel</h4>
+                  <p>Review total contributions</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/disaster/report" className="action-card">
+                <div className="action-icon">🚨</div>
+                <div className="action-content">
+                  <h4>Report Disaster</h4>
+                  <p>Notify authorities of an emergency</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+              
+              <Link to="/contribute" className="action-card">
+                <div className="action-icon">🤝</div>
+                <div className="action-content">
+                  <h4>Create Contribution</h4>
+                  <p>Submit resources or volunteer assistance</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+              
+              <Link to="/disasters" className="action-card">
+                <div className="action-icon">🌪️</div>
+                <div className="action-content">
+                  <h4>View Disasters</h4>
+                  <p>Monitor active emergency situations</p>
+                </div>
+                <div className="action-arrow">→</div>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 

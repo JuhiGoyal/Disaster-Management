@@ -25,10 +25,18 @@ const LandingPage = () => {
                 <span className="btn-icon">🔐</span>
                 Access System
               </Link>
-              <button className="btn btn-secondary hero-btn">
+              <a 
+                href="#features" 
+                className="btn btn-secondary hero-btn" 
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 <span className="btn-icon">📋</span>
                 Learn More
-              </button>
+              </a>
             </div>
           </div>
           <div className="hero-stats">
@@ -49,7 +57,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="features-section">
+      <section id="features" className="features-section">
         <div className="container">
           <div className="section-header">
             <h2>System Capabilities</h2>
@@ -88,7 +96,7 @@ const LandingPage = () => {
       </section>
 
       {/* Emergency Info Section */}
-      <section className="emergency-section">
+      <section id="emergency" className="emergency-section">
         <div className="container">
           <div className="emergency-content">
             <div className="emergency-text">

@@ -20,18 +20,15 @@ const Chatbot = () => {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const submitMessage = (text) => {
+    if (!text.trim()) return;
 
-    const userMessage = input;
-    setInput('');
-    setMessages(prev => [...prev, { text: userMessage, sender: 'user' }]);
+    setMessages(prev => [...prev, { text, sender: 'user' }]);
     setLoading(true);
 
     // Simulated local response logic
     setTimeout(() => {
-      const msg = userMessage.toLowerCase();
+      const msg = text.toLowerCase();
       let response = "";
 
       if (msg.includes("report") || msg.includes("incident")) {
@@ -53,6 +50,12 @@ const Chatbot = () => {
     }, 800);
   };
 
+  const handleSend = (e) => {
+    e.preventDefault();
+    submitMessage(input);
+    setInput('');
+  };
+
   const quickActions = [
     "How to report?",
     "How to contribute?",
@@ -61,7 +64,7 @@ const Chatbot = () => {
   ];
 
   const handleQuickAction = (action) => {
-    setInput(action);
+    submitMessage(action);
   };
 
   return (

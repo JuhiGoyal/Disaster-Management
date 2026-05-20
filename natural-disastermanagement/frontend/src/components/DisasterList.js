@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
+import { useAuth } from '../contexts/AuthContext';
 import './DisasterList.css';
 
 const DisasterList = () => {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
   const [disasters, setDisasters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState({
@@ -292,12 +295,14 @@ const DisasterList = () => {
                   >
                     🤝 Contribute
                   </Link>
-                  <Link 
-                    to={`/disaster/create?id=${disaster._id}`} 
-                    className="btn btn-secondary"
-                  >
-                    📊 View Details
-                  </Link>
+                  {isAdmin && (
+                    <Link 
+                      to={`/disaster/create?id=${disaster._id}`} 
+                      className="btn btn-secondary"
+                    >
+                      ✏️ Edit Disaster
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
