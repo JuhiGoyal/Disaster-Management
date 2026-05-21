@@ -362,7 +362,7 @@ const ContributionForm = () => {
   // --- fetchDisasters: robust parsing and safe set
   const fetchDisasters = async () => {
     try {
-      const response = await api.get('/disaster');
+      const response = await api.get('/disaster?limit=1000');
       // handle common response shapes
       let payload = null;
       if (response && response.data) {

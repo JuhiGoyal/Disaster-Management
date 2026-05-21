@@ -25,16 +25,16 @@ const Dashboard = () => {
       
       // Fetch statistics
       const [disastersRes, contributionsRes, myContributionsRes] = await Promise.all([
-        api.get('/disaster'),
-        api.get('/contribution'),
-        api.get('/contribution?userId=' + user?._id)
+        api.get('/disaster?limit=1'),
+        api.get('/contribution?limit=5'),
+        api.get('/contribution?userId=' + (user?._id || user?.id) + '&limit=1')
       ]);
 
       setStats({
-        totalDisasters: disastersRes.data.data?.length || 0,
-        totalContributions: contributionsRes.data.data?.length || 0,
-        myContributions: myContributionsRes.data.data?.length || 0,
-        recentContributions: contributionsRes.data.data?.slice(0, 5) || []
+        totalDisasters: disastersRes.data.pagination?.totalItems ?? disastersRes.data.data?.length ?? 0,
+        totalContributions: contributionsRes.data.pagination?.totalItems ?? contributionsRes.data.data?.length ?? 0,
+        myContributions: myContributionsRes.data.pagination?.totalItems ?? myContributionsRes.data.data?.length ?? 0,
+        recentContributions: contributionsRes.data.data || []
       });
     } catch (error) {
       console.error('Error fetching dashboard data:', error);

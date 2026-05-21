@@ -11,7 +11,7 @@ const AdminContributions = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const { data } = await api.get('/contribution');
+        const { data } = await api.get('/contribution?limit=1000');
         setContributions(Array.isArray(data?.data) ? data.data : []);
       } catch (e) {
         console.error('Failed to fetch contributions', e);

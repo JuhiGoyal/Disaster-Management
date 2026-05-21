@@ -71,6 +71,7 @@ const getRescueTeams = async (req, res) => {
             specialization,
             availability,
             ngoName,
+            disasterId,
             page = 1,
             limit = 10
         } = req.query;
@@ -80,6 +81,7 @@ const getRescueTeams = async (req, res) => {
         if (specialization) filter.specialization = specialization;
         if (availability) filter.availability = availability;
         if (ngoName) filter.ngoName = new RegExp(ngoName, 'i'); // case-insensitive search
+        if (disasterId) filter.assignedDisasters = disasterId;
 
         const skip = (page - 1) * limit;
 
@@ -173,7 +175,7 @@ const assignRescueTeamToDisaster = async (req, res) => {
         }
 
         // Check if team is already assigned
-        if (rescueTeam.assignedDisasters.includes(disasterId)) {
+        if (rescueTeam.assignedDisasters.some(id => id.toString() === disasterId)) {
             return res.status(400).json({
                 success: false,
                 message: 'Rescue team already assigned to this disaster'

@@ -40,7 +40,7 @@ const DisasterList = () => {
   const fetchDisasters = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/disaster');
+      const response = await api.get('/disaster?limit=1000');
       setDisasters(response.data.data);
     } catch (error) {
       console.error('Error fetching disasters:', error);

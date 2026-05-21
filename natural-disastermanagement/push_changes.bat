@@ -9,7 +9,7 @@ git add .
 
 echo.
 echo [2/3] Committing changes...
-git commit -m "Fix role-based access visibility, fix broken routing buttons, and add Chatbot quick-action functionality"
+git commit -m "Fix local DB integration, duplicate rescue team assignments, pagination capping, and dashboard statistics"
 
 echo.
 echo [3/3] Pushing to remote repository...

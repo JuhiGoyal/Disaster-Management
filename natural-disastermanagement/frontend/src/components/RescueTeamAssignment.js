@@ -31,7 +31,7 @@ const RescueTeamAssignment = () => {
 
   const fetchDisasters = async () => {
     try {
-      const response = await api.get('/disaster');
+      const response = await api.get('/disaster?limit=1000');
       const disastersData = response.data?.data ?? [];
       setDisasters(Array.isArray(disastersData) ? disastersData : []);
     } catch (error) {
@@ -43,7 +43,7 @@ const RescueTeamAssignment = () => {
   // Fetch all rescue teams without filters
   const fetchAllRescueTeams = async () => {
     try {
-      const response = await api.get('/rescue-team');
+      const response = await api.get('/rescue-team?limit=1000');
       const teamsData = response.data?.data ?? [];
       const teamsArray = Array.isArray(teamsData) ? teamsData : [];
       setAllTeams(teamsArray);
@@ -83,12 +83,9 @@ const RescueTeamAssignment = () => {
 
   const loadAssignedTeams = async (disasterId) => {
     try {
-      const response = await api.get(`/rescue-team`);
+      const response = await api.get(`/rescue-team?disasterId=${disasterId}&limit=1000`);
       const teamsData = response.data?.data ?? [];
-      const assigned = teamsData.filter(team =>
-        team.assignedDisasters?.some(d => d._id === disasterId || d === disasterId)
-      );
-      setAssignedTeams(assigned);
+      setAssignedTeams(Array.isArray(teamsData) ? teamsData : []);
     } catch (error) {
       console.error('Error loading assigned teams:', error);
     }
